@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
 
-public class TicTacSmart {
+public class TicTacSm_V2 {
     private static int size = 3;
     private static char[][] map = new char[size][size];
     private static char _X = 'X';
@@ -12,16 +12,14 @@ public class TicTacSmart {
     private static Random random = new Random();
 
     private static final boolean SILLY_MODE = false;
-//    public static TicTacGUI tcGUI;
+    private static final boolean SCORING_MODE = false;
+
 
     public static void main(String[] args) throws InterruptedException {
         initMap();
         printMap();
-//        tcGUI = new TicTacGUI();
-
         startGame();
     }
-
 
     // НАЧАТЬ ИГРУ
     private static void startGame() throws InterruptedException {
@@ -30,14 +28,21 @@ public class TicTacSmart {
         while (isEmptyCell()) {
             humanTurn();
             if (isWin(_X)) {
-                System.out.println("Вы победили!"); break; }
+                Thread.sleep(1000);
+                System.out.println("Вы победили!");
+                break; }
 
             if(!isEmptyCell()) {
-                System.out.println("Поле заполнено"); break; }
+                System.out.println("Поле заполнено");
+                break;
+            }
 
             computerTurn();
             if (isWin(_O)) {
-                System.out.println("Компьютер победили!"); break; }
+                Thread.sleep(1000);
+                System.out.println("Компьютер победили!");
+                printMap();
+                break; }
         }
         System.out.println("End Game");
     }
@@ -55,41 +60,73 @@ public class TicTacSmart {
 
         map[x][y] = _X;
         printMap();
-
         System.out.println("Ход игрока окончен.");
     }
 
     // ХОД COMPUTER
     static void computerTurn() {
         System.out.println("Очередь компьютера ");
-        int x=0, y=0;
+        int x = 0, y = 0;
 
         if (SILLY_MODE) {
             do {
                 x = random.nextInt(size);
                 y = random.nextInt(size);
-            } while (isCellValid(x, y) );        //true -не подходит, продолжает искать
-            // isFreeCell==true-ячейка пуста, обращается в falce и выходит)
+            } while (!isCellValid(x, y) );
         }
-        else {
-            for (int i = 0; i < map.length; i++) {
-                for (int j = 0; j < map.length; j++) {
-                    if (isCellValid(i, j)) {
-                        if (checkNearCell(i, j, _O) ) {
-                            x = i;
-                            y = j;
-                        }
+        else if (!SCORING_MODE) {
+            boolean moveFound = false;
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (map[i][j] == _EMPTY) {
+                        // left - up 1
+                        if ( (i-1)>=0 && (j-1)>=0 && map[i-1][j-1] == _O ) {
+                            x = i; y = j;
+                            moveFound = true; }
+                        // up 2
+                         else if ( (i-1) >= 0 && map[i-1][j] == _O ) {
+                            x = i; y = j;
+                            moveFound = true; }
+                        // right - up 3
+                        else if ( (i-1) >= 0  && (j+1) < size && map[i-1][j+1] == _O) {
+                            x = i; y = j;
+                            moveFound = true; }
+                        // left 4
+                        else if ( (j-1) >= 0 && map[i][j-1] == _O) {
+                            x = i; y = j;
+                            moveFound = true; }
+                        // right 5
+                        else if ( (j+1) < size && map[i][j+1] == _O) {
+                            x = i; y = j;
+                            moveFound = true; }
+                        // bottom - left 6
+                        else if ( (i+1) < size && (j-1) >= 0 && map[i+1][j-1] == _O ) {
+                            x = i; y = j;
+                            moveFound = true; }
+                        // bottom 7
+                        else if ( (i+1) < size && map[i+1][j] == _O) {
+                            x = i; y = j;
+                            moveFound = true; }
+                        // bottom - right 8
+                        else if ( (i+1) < size && (j+1) <size && map[i][j] == _O) {
+                            x = i; y = j;
+                            moveFound = true; }
                     }
+                    if (moveFound) { break; }
                 }
+                if (moveFound) { break; }
             }
-            if (x==0 && y==0) {
-                do {
-                    x = random.nextInt(size);
-                    y = random.nextInt(size);
-                } while ( !isEmptyCell() || !isCellValid(x, y) );
-            }
+        } else {
+
         }
 
+        //для первого хода
+        if (x == 0 && y == 0) {
+            do {
+                x = random.nextInt(size);
+                y = random.nextInt(size);
+            } while (!isCellValid(x, y));
+        }
 
         map[x][y] = _O;
         System.out.println("Компьютер сходил по координатам (" +(x+1)+", "+(y+1)+")");
@@ -97,19 +134,6 @@ public class TicTacSmart {
         System.out.println("Ход компьютера окончен.");
     }
 
-    static boolean checkNearCell(int row, int col, int val) {
-        int startRow = Math.max(row - 1, 0);
-        int stopRow = Math.min(row + 1, map.length - 1);
-        for (int i = startRow; i <= stopRow; i++) {
-            int startCol = Math.max(col - 1, 0);
-            int stopCol = Math.min(col + 1, map[i].length - 1);
-            for (int j = startCol; j <= stopCol; j++) {
-                if (map[i][j] == val && !(i == row && j == col))
-                    return true;
-            }
-        }
-        return false;
-    }
 
     // ПРОВЕРКА ВЫИГРЫША
     static boolean isWin(char plS) {
@@ -127,6 +151,7 @@ public class TicTacSmart {
         return result;
     }
 
+
     // ПРОВЕРКА ЯЧЕЙКИ
     static boolean isCellValid(int x, int y) {               // Возвращает true, если ячейка пуста, равна 0, и НЕ равна x или y .
         boolean result = false;                              // falce, если ячейка РАВНА x или y .
@@ -137,18 +162,17 @@ public class TicTacSmart {
 
 
     // ПРОВЕРКА ПОЛЯ НА ЗАПОЛНЕННОСТЬ
-    private static boolean isEmptyCell() {                   // falce - есть хотя бы одна пустая, TRUE - О или Х
-         int score=0;
-
+    private static boolean isEmptyCell() {
+        int emptyCell =0;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
-                if (map[i][j] ==_EMPTY) {
-                    score++;
-                }
+                if (map[i][j]==_EMPTY) {
+                    emptyCell++;
+                    break;}
             }
         }
-        if (score>0) { return true;
-        } else {return false;}
+        if (emptyCell > 0) { return true;
+        } else {return false; }
     }
 
     // ПРОВЕРКА НА КОРРЕКТНОСТЬ ВВОДА ККОРДИНАТ
@@ -189,5 +213,3 @@ public class TicTacSmart {
         }
     }
 }
-
-// когда остается 2 ячейки после моего хода, комп не может сгенерить значение
