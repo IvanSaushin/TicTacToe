@@ -2,7 +2,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class TicTacSm_V2 {
-    private static int size = 3;
+    private static int size = 4;
     private static char[][] map = new char[size][size];
     private static char _X = 'X';
     private static char _O = 'O';
@@ -74,8 +74,9 @@ public class TicTacSm_V2 {
                 y = random.nextInt(size);
             } while (!isCellValid(x, y) );
         }
-        else if (!SCORING_MODE) {
+        else if (SCORING_MODE) {
             boolean moveFound = false;
+
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if (map[i][j] == _EMPTY) {
@@ -116,8 +117,56 @@ public class TicTacSm_V2 {
                 }
                 if (moveFound) { break; }
             }
-        } else {
+        }
+        // ПОДСЧЁТ ОЧКОВ КАЖДОЙ ЯЧЕЙКИ
+        else {
+            int maxscore = 0;
 
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    int currentCellScore=0;
+
+                    if (map[i][j] == _EMPTY) {
+                        // left - up 1
+                        if ((i - 1) >= 0 && (j - 1) >= 0 && map[i - 1][j - 1] == _O) {
+                            currentCellScore++;
+                        }
+                        // up 2
+                        if ((i - 1) >= 0 && map[i - 1][j] == _O) {
+                            currentCellScore++;
+                        }
+                        // right - up 3
+                        if ((i - 1) >= 0 && (j + 1) < size && map[i - 1][j + 1] == _O) {
+                            currentCellScore++;
+                        }
+                        // left 4
+                        if ((j - 1) >= 0 && map[i][j - 1] == _O) {
+                            currentCellScore++;
+                        }
+                        // right 5
+                        if ((j + 1) < size && map[i][j + 1] == _O) {
+                            currentCellScore++;
+                        }
+                        // bottom - left 6
+                        if ((i + 1) < size && (j - 1) >= 0 && map[i + 1][j - 1] == _O) {
+                            currentCellScore++;
+                        }
+                        // bottom 7
+                        if ((i + 1) < size && map[i + 1][j] == _O) {
+                            currentCellScore++;
+                        }
+                        // bottom - right 8
+                        if ((i + 1) < size && (j + 1) < size && map[i][j] == _O) {
+                            currentCellScore++;
+                        }
+                    }
+
+                    if (currentCellScore>maxscore) {
+                        maxscore= currentCellScore;
+                        x = i; y = j;
+                    }
+                }
+            }
         }
 
         //для первого хода
@@ -164,8 +213,8 @@ public class TicTacSm_V2 {
     // ПРОВЕРКА ПОЛЯ НА ЗАПОЛНЕННОСТЬ
     private static boolean isEmptyCell() {
         int emptyCell =0;
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map.length; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (map[i][j]==_EMPTY) {
                     emptyCell++;
                     break;}
@@ -190,8 +239,8 @@ public class TicTacSm_V2 {
 
     // ЗАПОЛНИТЬ КАРТУ
     private static void initMap() {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map.length; j++) {
+        for (int i = 0; i <size; i++) {
+            for (int j = 0; j < size; j++) {
                 map[i][j] = _EMPTY;
             }
         }
@@ -204,9 +253,9 @@ public class TicTacSm_V2 {
             System.out.print(i+" ");
         }
         System.out.println();
-        for (int i = 0; i < map.length; i++) {
+        for (int i = 0; i < size; i++) {
             System.out.print((i+1)+" ");
-            for (int j = 0; j < map.length; j++) {
+            for (int j = 0; j < size; j++) {
                 System.out.print(map[i][j]+" ");
             }
             System.out.println();
