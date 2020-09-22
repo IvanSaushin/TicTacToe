@@ -12,17 +12,13 @@ public class TicTacSilly {
     private static Scanner userInput = new Scanner(System.in);
     private static Random random = new Random();
 
-    private static final boolean SILLY_MODE = false;
-//    public static TicTacGUI tcGUI;
+    private static final boolean SILLY_MODE = true;
 
     public static void main(String[] args) throws InterruptedException {
         initMap();
         printMap();
-//        tcGUI = new TicTacGUI();
-
         startGame();
     }
-
 
     // НАЧАТЬ ИГРУ
     private static void startGame() throws InterruptedException {
@@ -72,13 +68,12 @@ public class TicTacSilly {
         System.out.println("Очередь компьютера ");
         int x, y;
 
-//        if (true) {
+        if (SILLY_MODE) {
             do {
                 x = random.nextInt(size);
                 y = random.nextInt(size);
-            } while (isFreeCell(x, y) || !isEmptyCell());        //true -не подходит, продолжает искать
-                                                                 // isFreeCell==true-ячейка пуста, обращается в falce и выходит)
-//        }
+            } while (isFreeCell(x, y) || !isEmptyCell());
+        }
 //        else {
 //            for (int i = 0; i < map.length; i++) {
 //                for (int j = 0; j < map.length; j++) {
@@ -87,7 +82,6 @@ public class TicTacSilly {
 //                   }
 //                }
 //            }
-//        }
 
         map[x][y] = _O;
         System.out.println("Компьютер сходил по координатам (" +(x+1)+", "+(y+1)+")");
@@ -131,8 +125,8 @@ public class TicTacSilly {
                     break;}
             }
         }
-        if (emptyCell > 0) { return true;     // если пустых>0 - возвращает true, цикл продолж-ся
-        } else {return false; }                 //пустых нет, =0
+        if (emptyCell > 0) { return true;
+        } else {return false; }
     }
 
     // ПРОВЕРКА НА КОРРЕКТНОСТЬ ВВОДА ККОРДИНАТ
@@ -173,6 +167,3 @@ public class TicTacSilly {
         }
     }
 }
-
-// когда остается 2 ячейки после моего хода, комп не может сгенерить значение
-
