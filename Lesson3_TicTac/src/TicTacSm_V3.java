@@ -1,19 +1,18 @@
 import java.util.Random;
 import java.util.Scanner;
 
-public class TicTacSm_V2 {
-    private static int size = 4;
-    private static char[][] map = new char[size][size];
-    private static char _X = 'X';
-    private static char _O = 'O';
-    private static char _EMPTY = '-';
+public class TicTacSm_V3 {
+    private static final int SIZE = 3;
+    private static char[][] map = new char[SIZE][SIZE];
+    private static final char _X = 'X';
+    private static final char _O = 'O';
+    private static final char _EMPTY = '-';
 
     private static Scanner userInput = new Scanner(System.in);
     private static Random random = new Random();
 
     private static final boolean SILLY_MODE = false;
     private static final boolean SCORING_MODE = false;
-
 
     public static void main(String[] args) throws InterruptedException {
         initMap();
@@ -70,26 +69,26 @@ public class TicTacSm_V2 {
 
         if (SILLY_MODE) {
             do {
-                x = random.nextInt(size);
-                y = random.nextInt(size);
+                x = random.nextInt(SIZE);
+                y = random.nextInt(SIZE);
             } while (!isCellValid(x, y) );
         }
         else if (SCORING_MODE) {
             boolean moveFound = false;
 
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
                     if (map[i][j] == _EMPTY) {
                         // left - up 1
                         if ( (i-1)>=0 && (j-1)>=0 && map[i-1][j-1] == _O ) {
                             x = i; y = j;
                             moveFound = true; }
                         // up 2
-                         else if ( (i-1) >= 0 && map[i-1][j] == _O ) {
+                        else if ( (i-1) >= 0 && map[i-1][j] == _O ) {
                             x = i; y = j;
                             moveFound = true; }
                         // right - up 3
-                        else if ( (i-1) >= 0  && (j+1) < size && map[i-1][j+1] == _O) {
+                        else if ( (i-1) >= 0  && (j+1) < SIZE && map[i-1][j+1] == _O) {
                             x = i; y = j;
                             moveFound = true; }
                         // left 4
@@ -97,19 +96,19 @@ public class TicTacSm_V2 {
                             x = i; y = j;
                             moveFound = true; }
                         // right 5
-                        else if ( (j+1) < size && map[i][j+1] == _O) {
+                        else if ( (j+1) < SIZE && map[i][j+1] == _O) {
                             x = i; y = j;
                             moveFound = true; }
                         // bottom - left 6
-                        else if ( (i+1) < size && (j-1) >= 0 && map[i+1][j-1] == _O ) {
+                        else if ( (i+1) < SIZE && (j-1) >= 0 && map[i+1][j-1] == _O ) {
                             x = i; y = j;
                             moveFound = true; }
                         // bottom 7
-                        else if ( (i+1) < size && map[i+1][j] == _O) {
+                        else if ( (i+1) < SIZE && map[i+1][j] == _O) {
                             x = i; y = j;
                             moveFound = true; }
                         // bottom - right 8
-                        else if ( (i+1) < size && (j+1) <size && map[i][j] == _O) {
+                        else if ( (i+1) < SIZE && (j+1) < SIZE && map[i][j] == _O) {
                             x = i; y = j;
                             moveFound = true; }
                     }
@@ -122,8 +121,8 @@ public class TicTacSm_V2 {
         else {
             int maxscore = 0;
 
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
                     int currentCellScore=0;
 
                     if (map[i][j] == _EMPTY) {
@@ -136,7 +135,7 @@ public class TicTacSm_V2 {
                             currentCellScore++;
                         }
                         // right - up 3
-                        if ((i - 1) >= 0 && (j + 1) < size && map[i - 1][j + 1] == _O) {
+                        if ((i - 1) >= 0 && (j + 1) < SIZE && map[i - 1][j + 1] == _O) {
                             currentCellScore++;
                         }
                         // left 4
@@ -144,19 +143,19 @@ public class TicTacSm_V2 {
                             currentCellScore++;
                         }
                         // right 5
-                        if ((j + 1) < size && map[i][j + 1] == _O) {
+                        if ((j + 1) < SIZE && map[i][j + 1] == _O) {
                             currentCellScore++;
                         }
                         // bottom - left 6
-                        if ((i + 1) < size && (j - 1) >= 0 && map[i + 1][j - 1] == _O) {
+                        if ((i + 1) < SIZE && (j - 1) >= 0 && map[i + 1][j - 1] == _O) {
                             currentCellScore++;
                         }
                         // bottom 7
-                        if ((i + 1) < size && map[i + 1][j] == _O) {
+                        if ((i + 1) < SIZE && map[i + 1][j] == _O) {
                             currentCellScore++;
                         }
                         // bottom - right 8
-                        if ((i + 1) < size && (j + 1) < size && map[i][j] == _O) {
+                        if ((i + 1) < SIZE && (j + 1) < SIZE && map[i][j] == _O) {
                             currentCellScore++;
                         }
                     }
@@ -172,8 +171,8 @@ public class TicTacSm_V2 {
         //для первого хода
         if (x == 0 && y == 0) {
             do {
-                x = random.nextInt(size);
-                y = random.nextInt(size);
+                x = random.nextInt(SIZE);
+                y = random.nextInt(SIZE);
             } while (!isCellValid(x, y));
         }
 
@@ -187,19 +186,45 @@ public class TicTacSm_V2 {
     // ПРОВЕРКА ВЫИГРЫША
     static boolean isWin(char plS) {
         boolean result = false;
-        if (    map[0][0] == plS && map[0][1] == plS && map[0][2] == plS ||     //1
-                map[1][0] == plS && map[1][1] == plS && map[1][2] == plS ||     //2
-                map[2][0] == plS && map[2][1] == plS && map[2][2] == plS ||     //3
-                map[0][0] == plS && map[1][0] == plS && map[2][0] == plS ||     //4
-                map[0][1] == plS && map[1][1] == plS && map[2][1] == plS ||     //5
-                map[0][2] == plS && map[1][2] == plS && map[2][2] == plS ||     //6
-                map[0][0] == plS && map[1][1] == plS && map[2][2] == plS ||     //7
-                map[2][0] == plS && map[1][1] == plS && map[0][2] == plS) {     //8
+        if ( checkWinDiagonal(plS) || checkWinLines(plS) ) {
             result = true;
         }
         return result;
     }
 
+    public static boolean checkWinDiagonal(char playerSymbol) {
+        boolean result = false;
+        boolean leftRight = true;
+        boolean rightLeft = true;
+
+        for (int i = 0; i < SIZE; i++) {
+            leftRight &= (map[i][i] == playerSymbol);
+            rightLeft &= (map[i][SIZE-i-1] == playerSymbol);
+        }
+        if (leftRight || rightLeft) {
+            result = true;
+        }
+        return result;
+    }
+
+    public static boolean checkWinLines(char playerSymbol) {
+        boolean result = false;
+
+        for (int row = 0; row < SIZE; row++) {
+            boolean horizonLine = true;
+            boolean verticalLine = true;
+
+            for (int column = 0; column < SIZE; column++) {
+                horizonLine &= (map[row][column] == playerSymbol);
+                verticalLine &= (map[column][row] == playerSymbol);
+            }
+            if (horizonLine || verticalLine) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 
     // ПРОВЕРКА ЯЧЕЙКИ
     static boolean isCellValid(int x, int y) {               // Возвращает true, если ячейка пуста, равна 0, и НЕ равна x или y .
@@ -209,12 +234,11 @@ public class TicTacSm_V2 {
         return result;
     }
 
-
     // ПРОВЕРКА ПОЛЯ НА ЗАПОЛНЕННОСТЬ
     private static boolean isEmptyCell() {
         int emptyCell =0;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 if (map[i][j]==_EMPTY) {
                     emptyCell++;
                     break;}
@@ -239,8 +263,8 @@ public class TicTacSm_V2 {
 
     // ЗАПОЛНИТЬ КАРТУ
     private static void initMap() {
-        for (int i = 0; i <size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 map[i][j] = _EMPTY;
             }
         }
@@ -249,13 +273,13 @@ public class TicTacSm_V2 {
     // ОТОБРАЗИТЬ ПОЛЕ
     private static void printMap() {
 
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i <= SIZE; i++) {
             System.out.print(i+" ");
         }
         System.out.println();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < SIZE; i++) {
             System.out.print((i+1)+" ");
-            for (int j = 0; j < size; j++) {
+            for (int j = 0; j < SIZE; j++) {
                 System.out.print(map[i][j]+" ");
             }
             System.out.println();
