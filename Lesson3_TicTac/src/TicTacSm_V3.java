@@ -4,16 +4,15 @@ import java.util.Scanner;
 public class TicTacSm_V3 {
     private static final int SIZE = 3;
     private static char[][] map = new char[SIZE][SIZE];
-    private static char _X = 'X';
-    private static char _O = 'O';
-    private static char _EMPTY = '-';
+    private static final char _X = 'X';
+    private static final char _O = 'O';
+    private static final char _EMPTY = '-';
 
     private static Scanner userInput = new Scanner(System.in);
     private static Random random = new Random();
 
     private static final boolean SILLY_MODE = false;
     private static final boolean SCORING_MODE = false;
-
 
     public static void main(String[] args) throws InterruptedException {
         initMap();
@@ -211,13 +210,13 @@ public class TicTacSm_V3 {
     public static boolean checkWinLines(char playerSymbol) {
         boolean result = false;
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int row = 0; row < SIZE; row++) {
             boolean horizonLine = true;
             boolean verticalLine = true;
 
-            for (int j = 0; j < SIZE; j++) {
-                horizonLine &= (map[i][j] == playerSymbol);
-                verticalLine &= (map[j][i] == playerSymbol);
+            for (int column = 0; column < SIZE; column++) {
+                horizonLine &= (map[row][column] == playerSymbol);
+                verticalLine &= (map[column][row] == playerSymbol);
             }
             if (horizonLine || verticalLine) {
                 result = true;
